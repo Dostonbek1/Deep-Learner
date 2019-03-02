@@ -3,6 +3,7 @@ import copy
 from pathlib import *
 mnist=keras.datasets.mnist
 import pandas as pd
+import subprocess
 
 def make_dummy(data):
     s = pd.Series(list('abca'))
