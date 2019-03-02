@@ -3,8 +3,12 @@ import copy
 from pathlib import *
 import subprocess
 import pandas as pd
+import rpy2.robjects as robjects
+
+
+
 def make_prep():
-    subprocess.call ("C:/Users/lomiag/PycharmProjects/RevolutionUC/the_recepie_scrip_imputedt.R", shell=True)
+    subprocess.call(["R the_recepie_scrip_imputedt.R"], shell=True)
 
 def n_network(data):
 
@@ -32,4 +36,22 @@ def save(model):
     f_path.write_text(model_str)
     model.save_weights("model_weights.h5")
 
-df=pd.read_csv("C:/Users/lomiag/Desktop/Data Analytics/Homework 3")
+df=pd.read_csv("data/HR_Churn.csv")
+# make_prep()
+
+robjects.r(r'''
+        library(recipes)
+        data_set <- read.csv('data/HR_Churn.csv')
+
+        recepie_obj <- recipe(data_set[0] ~ ., data=data_set)%>%
+            step_dummy(all_predictors(),-all_outcomes())%>%
+            step_knnimpute(all_predictors(),-all_outcomes())%>%
+            step_center(all_predictors(),-all_outcomes())%>%
+            step_scale(all_predictors(),-all_outcomes())%>%
+            prep(data=train_tbl)
+        x_train<-bake(recepie_obj, new_data=train_tbl)
+        write.csv(as.matrix(x_train),file = "data/data_ready.csv")
+        ''')
+
+
+        
