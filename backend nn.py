@@ -1,13 +1,10 @@
 import keras
 import copy
 from pathlib import *
-mnist=keras.datasets.mnist
-import pandas as pd
 import subprocess
-
-def make_dummy(data):
-    s = pd.Series(list('abca'))
-    pd.get_dummies(s)
+import pandas as pd
+def make_prep():
+    subprocess.call ("C:/Users/lomiag/PycharmProjects/RevolutionUC/the_recepie_scrip_imputedt.R", shell=True)
 
 def n_network(data):
 
@@ -34,3 +31,5 @@ def save(model):
     f_path=Path("model_str.json")
     f_path.write_text(model_str)
     model.save_weights("model_weights.h5")
+
+df=pd.read_csv("C:/Users/lomiag/Desktop/Data Analytics/Homework 3")
