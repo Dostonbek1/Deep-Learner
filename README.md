@@ -26,3 +26,15 @@ What we learned:
 •	Designing user interface
 •	Optimizing user experience 
 •	Understanding user needs
+
+# To Run the App
+
+1. Clone or download the repo as .zip file
+2. You need to have Python 3 to be able to run the app. Install requirements and dependencies by running:
+'''
+$ pip3 install -r requirements.txt
+'''
+3. Start the app by running:
+'''
+$ python3 GUI.py
+'''
