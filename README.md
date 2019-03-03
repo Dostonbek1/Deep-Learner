@@ -1,1 +1,28 @@
 # RevolutionUC
+
+Project: Deep Learner
+
+Authors: 
+
+•	Giorgi Lomia
+•	Dostonbek Toirov
+•	Hila Manalai
+•	Emely Alfaro
+     
+Categories:
+•	Education
+•	Demystify Data
+
+Purpose: 
+To make neural networks/deep learning more accessible to general public and those who might not have programming skills.
+
+Description:
+Deep Learner is an interactive GUI that allows users to import data, visualize it, decide which variable to predict and run neural networks on it. Users are able to construct and train complex neural networks without writing any code. Based on the obtained results, users can try more optimizers, change predictors or save and export the model results to make decisions. 
+In general, this program enables users to create their own neural network models without any prior knowledge of coding.
+
+What we learned:
+•	Creating a fully viable product
+•	Better understanding of Deep Learning and the underlying structure of neural networks
+•	Designing user interface
+•	Optimizing user experience 
+•	Understanding user needs
