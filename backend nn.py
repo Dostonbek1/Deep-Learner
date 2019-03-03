@@ -39,19 +39,22 @@ def save(model):
 df=pd.read_csv("data/HR_Churn.csv")
 # make_prep()
 
+target_outcome = input("What is your target?:")
+
 robjects.r(r'''
         library(recipes)
-        data_set <- read.csv('data/HR_Churn.csv')
+        data_set <- read.csv("data/HR_Churn.csv")
 
-        recepie_obj <- recipe(data_set[0] ~ ., data=data_set)%>%
+        recepie_obj <- recipe({0} ~ ., data=data_set)%>%
             step_dummy(all_predictors(),-all_outcomes())%>%
             step_knnimpute(all_predictors(),-all_outcomes())%>%
             step_center(all_predictors(),-all_outcomes())%>%
             step_scale(all_predictors(),-all_outcomes())%>%
-            prep(data=train_tbl)
-        x_train<-bake(recepie_obj, new_data=train_tbl)
+            prep(data=data_set)
+        x_train<-bake(recepie_obj, new_data=data_set)
         write.csv(as.matrix(x_train),file = "data/data_ready.csv")
-        ''')
+        '''.format(target_outcome))
+
 
 
         
