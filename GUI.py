@@ -4,12 +4,12 @@
 
 ######################################################################
 from tkinter import *
-import cv2
 import tkinter.filedialog as filer
 import tkinter as tk
 import tkinter
 import csv
 from PIL import Image, ImageTk
+from backend_nn import *
 
 
 class Datactive:
@@ -18,16 +18,16 @@ class Datactive:
         self.file = ''
         self.savefile = ''
         self.path = ''
-        self.target_model = ''
         self.dropdown = ''
+        self.targeter=''
     ###########################################################################
         self.label = tkinter.Label(root, text="Target", bg="Green", fg='white')
         self.label.pack()
         self.label.place(x=20, y=0)
     ############################################################################
-        self.target = tkinter.Entry()
-        self.target.pack()
-        self.target.place(x=70, y=0)
+        self.target_box = tkinter.Entry()
+        self.target_box.pack()
+        self.target_box.place(x=70, y=0)
 
     def buildGUI(self, root):
         self.ImgFrame = Frame(root, width=650, height=500, background="bisque")
@@ -38,15 +38,15 @@ class Datactive:
         choose_file.pack()
         choose_file.place(x=700, y=150)
 
-        train = Button(root, text="Train Data", command=self.file, height=1, width=9, bg='green', fg='white', font=20)
+        train = Button(root, text="Train Data", command=self.train_data, height=1, width=9, bg='green', fg='white', font=20)
         train.pack()
         train.place(x=700, y=300)
 
-        test = Button(root, text="Test Data", command=self.file, height=1, width=9, bg='green', fg='white', font=20)
+        test = Button(root, text="Test Data", command=self.train_data, height=1, width=9, bg='green', fg='white', font=20)
         test.pack()
         test.place(x=700, y=450)
 
-        target_button = Button(root, text="Submit", command=self.target.get, bg='green', fg='white')
+        target_button = Button(root, text="Submit", command=self.retrieve_input, bg='green', fg='white')
         target_button.pack()
         target_button.place(x=200, y=0)
 
@@ -74,6 +74,9 @@ class Datactive:
         button2.pack(side='left', padx=10, pady=10)
         button2.place(x=370, y = 30)
 
+    def train_data(self):
+        self.data_ready = loader(self.targeter, self.path)
+        n_network(self.data_ready)
 
 
     def chooseFile(self):
@@ -81,16 +84,18 @@ class Datactive:
         filename = self.file
         print(filename)
         self.path=filename
-        return filename
+
+
+        # return filename
         # with open(self.file) as file:
         #     file_data = file.read()
         # # print(file_data)
 
     # we created this function to store the target input but we dont think its working. might not needed but here just in case
-    # def retrieve_input(self):
-    #     input = self.target.get()
-    #     print(input)
-    #     return input
+    def retrieve_input(self):
+        self.targeter=self.target_box.get()
+        print(self.targeter)
+        
 
 
 
@@ -99,8 +104,8 @@ class Datactive:
 def main():
     global test, root
     root = Tk()
-    root.geometry('900x700+300+50')
-    root.resizable(0, 0)
+    root.geometry('1200x700+300+50')
+    # root.resizable(0, 0)
     root.configure(background='white')
     root.title("Datactive")
     test = Datactive()
