@@ -15,7 +15,9 @@ import threading
 
 
 class Datactive:
-
+    """
+    This class initializes all the variables used in the interface and in the backend"
+    """
     def __init__(self):
         self.file = ''
         self.savefile = ''
@@ -29,17 +31,11 @@ class Datactive:
         self.dummy_check_value = tkinter.BooleanVar()
         self.regression_status = tkinter.BooleanVar()
         self.dummy_check_status = False
-    ###########################################################################
-        # self.label = tkinter.Label(root, text="Target", bg="Green", fg='white')
-        # self.label.pack()
-        # self.label.place(x=20, y=20)
-    ############################################################################
-        
 
     def buildGUI(self, root):
-        # layer_label = tk.Label(root, text="Neural Network Model", width=10, bg='lightblue', anchor='w', pady=8, font=('Verdana', 8, 'bold'))
-        # layer_label.grid(row=layer_row, column=layer_col, sticky='e')
-
+        """
+        "This function creates the GUI interface by adding buttons, labels and dropdowns"
+        """
         im = Image.open("images/logo.png")
         photo = ImageTk.PhotoImage(im)
 
@@ -64,10 +60,6 @@ class Datactive:
         train.pack()
         train.place(x=1140, y=300)
 
-        # test = Button(root, text="Test Data", command=self.test_data, height=2, width=18, bg='green', fg='white', font=20)
-        # test.pack()
-        # test.place(x=1000, y=200)
-
         save_model = Button(root, text="Save Model", command=self.save_model, height=2, width=18, bg='green', fg='white', font=20)
         save_model.pack()
         save_model.place(x=1140, y=350)
@@ -76,9 +68,6 @@ class Datactive:
         reset_btn = Button(root, text="Reset", command=self.reset, height=2, width=18, bg='green', fg='white', font=20)
         reset_btn.pack()
         reset_btn.place(x=1140, y=475)
-        # target_button = Button(root, text="Submit", command=self.retrieve_input, bg='green', fg='white')
-        # target_button.pack()
-        # target_button.place(x=200, y=0)
 
         self.target_box = tkinter.Entry()
         self.target_box.insert(0, "Target...")
@@ -95,7 +84,7 @@ class Datactive:
         self.batch_box.pack()
         self.batch_box.place(x=390, y=125)
 
-        self.dummy_check_box = tkinter.Checkbutton(root, text="Contains Qualitative", variable=self.dummy_check_value, command=self.dummy_handler)
+        self.dummy_check_box = tkinter.Checkbutton(root, text="Contains Qualitative", variable=self.dummy_check_value)
         self.dummy_check_box.pack()
         self.dummy_check_box.place(x=560, y=125)
 
@@ -112,10 +101,8 @@ class Datactive:
         self.option = tk.OptionMenu(root, self.var, *choices)
         self.option.pack(side='left', padx=10, pady=10)
         self.option.place(x=860, y = 120)
-        # button = tk.Button(root, text="Choose optimizer", command=self.dropdown)
-        # button.pack(side='left', padx=20, pady=10)
-        # button.place(x=130, y = 30)
 
+        # initializing layers
         self.input_layer = self.create_layer("Input", 0, 0)
 
         self.hidden_layer = self.create_layer("Hidden", 0, 2)
@@ -125,11 +112,11 @@ class Datactive:
 
         self.output_layer = self.create_layer("Output", 0, 100, "Output")
 
-        # button2 = tk.Button(root, text="Choose Class Mode", command=self.dropdown)
-        # button2.pack(side='left', padx=10, pady=10)
-        # button2.place(x=370, y = 30)
-
+        
     def create_layer(self, layer_label, layer_row, layer_col, layer="Not Output"):
+        """
+        function to create layer
+        """
         layer_label = tk.Label(self.ModelVizFrame, text=layer_label, width=5, bg='lightblue', anchor='w', pady=4, font=('Verdana', 8, 'bold'))
         layer_label.grid(row=layer_row, column=layer_col, sticky='e')
 
@@ -152,10 +139,14 @@ class Datactive:
             target_box = tkinter.Entry(self.ModelVizFrame, width=4)
             target_box.insert(0, "10")
             target_box.grid(row=layer_row+2, column=layer_col)
-
+            
             self.layer_nodes_lst.append(target_box)
 
+    
     def create_new_layer(self):
+        """
+         function to add layer
+        """
         if self.hidden_col < 19:
             layer_label = tk.Label(self.ModelVizFrame, text="Hidden", width=5, bg='lightblue', anchor='w', pady=4, font=('Verdana', 8, 'bold'))
             layer_label.grid(row=0, column=self.hidden_col, sticky='e')
@@ -182,56 +173,51 @@ class Datactive:
 
             self.hidden_col += 2
 
+    
     def test_data(self):
+        """
+        function to enable test_data. passing as we did not have time to finish it.
+        """
         pass
-        # self.data_ready_test = loader(self.targeter, self.path, self.dummy_check_status,self.regression_status.get(),test_bool=True)
 
-        # tester(self.model,self.data_ready_test)
-        # # self.model.evaluate()
+
+        # function to train data by getting the user selections
     def train_data(self):
         self.density_matrix = []
         self.data_ready = []
         self.optimizer_value = self.var.get()
-        # print(self.optimizer_value)
-        # self.class_mode_value = self.var2.get()
-        # print(self.class_mode_value)
 
         for layer in self.layer_nodes_lst:
             self.density_matrix.append([int(layer.get())])
 
-        print(self.density_matrix)
-
         self.targeter = self.target_box.get()
         self.epochs_size = int(self.epoch_box.get())
         self.batch_size = int(self.batch_box.get())
-        print(self.targeter)
-        print(self.regression_status.get())
 
-        # self.message_label = tk.Label(root, text="Loading the model. Please, wait...", width=18, bg='lightblue', anchor='w', pady=8)
-        # self.message_label.pack()
-        # self.message_label.place(x=1140, y=85)
+        self.data_ready = loader(self.targeter, self.path, self.dummy_check_value.get(),self.regression_status.get())
+        self.model, self.hist = n_network(self.data_ready, self.optimizer_value, self.density_matrix, self.batch_size, self.epochs_size, self.regression_status.get())
+        ploter(self.hist)
 
-        self.data_ready = loader(self.targeter, self.path, self.dummy_check_status,self.regression_status.get())
-        
-        # self.message_label['text'] = "Training the model. Please, wait..."
-        self.run_model()
-        # self.message_label['text'] = "Done Training!"
-        # t1 = threading.Thread(target=self.train_started_message) 
-        # t2 = threading.Thread(target=self.run_model) 
 
-        # starting thread 1 
-        # t1.start() 
-        # starting thread 2 
-        # t2.start() 
         
     def run_model(self):
+        """
+        function to run the model by calling the backend scripts
+        """
         self.model = n_network(self.data_ready, self.optimizer_value, self.density_matrix, self.batch_size, self.epochs_size, self.regression_status.get())
         
-
+        
     def train_started_message(self):
+        """
+        displaying a textbox message to notify that the trainning of data is being done
+        """
         self.message_train_started = tk.messagebox.showinfo("Info", "Training the model. Please, wait...")
 
+
     def viz_data(self):
+        """
+        function to access the web and visualize the data with ggplots
+        """
         robjects.r(r'''
             library(esquisse)
 
@@ -239,22 +225,32 @@ class Datactive:
             esquisser(data_raw)
             '''.format(self.path))
 
+        
     def dummy_handler(self):
+        """
+        bool function to run the dummy variables step only if checked by user in the GUI
+        """
         print(self.dummy_check_value.get())
         if self.dummy_check_value.get() == "off":
             self.dummy_check_status = False
-            # print(self.dummy_check_status)
         else:
             self.dummy_check_status = True
-            # print(self.dummy_check_status)
 
+         
     def chooseFile(self):
+        """
+        function to let user choose the CSV file to be processed.
+        """
         self.file = filer.askopenfilename(initialdir="/", title="Select file", filetypes=(("excel csv files", "*.csv"), ("all files", "*.*")))
         filename = self.file
         print(filename)
         self.path=filename
     
+
     def reset(self):
+        """
+        creating the rest button to start over again
+        """
         global root
         root.destroy()
         main()
@@ -262,14 +258,10 @@ class Datactive:
     def save_model(self):
         save(self.model)
 
-        # return filename
-        # with open(self.file) as file:
-        #     file_data = file.read()
-        # # print(file_data)
- 
-
-
 def main():
+    """
+    calling all the functions 
+    """
     global test, root
     root = Tk()
     root.geometry('1200x700+300+50')
