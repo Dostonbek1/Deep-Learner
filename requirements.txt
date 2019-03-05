@@ -29,7 +29,6 @@ cycler==0.10.0
 db==0.1.1
 defer==1.0.6
 distro-info==0.18
-Django==2.0.5
 dnspython==1.15.0
 docker==3.5.0
 docker-compose==1.22.0
@@ -103,7 +102,6 @@ py==1.8.0
 pyasn1==0.4.5
 pycairo==1.16.2
 pycparser==2.19
-pycrypto==2.6.1
 pycups==1.9.73
 pygame==1.9.4
 pygobject==3.26.1
@@ -123,7 +121,6 @@ python-socketio==2.1.0
 pytz==2018.9
 pyxattr==0.6.0
 pyxdg==0.25
-PyYAML==3.13
 Quandl==3.4.6
 reportlab==3.4.0
 requests==2.21.0
