@@ -1,11 +1,10 @@
 import keras
-import copy
+import time
 from pathlib import *
 import subprocess
 import pandas as pd
 import rpy2.robjects as robjects
 import numpy as np
-from ann_visualizer.visualize import ann_viz
 from keras.callbacks import History
 import matplotlib.pyplot as plt
 import tkinter as tk
@@ -15,7 +14,7 @@ def make_prep():
     
     subprocess.call(["R the_recepie_scrip_imputedt.R"], shell=True)
 
-def n_network(data,optimizer_var, layers, batch_sz, epochs_size, regression_status):
+def n_network(data,optimizer_var, layers, batch_sz, epochs_size, regression_status,validation_spliter):
     global num_cat
     multi_class = False
     metrics_value = 'accuracy'
@@ -59,8 +58,7 @@ def n_network(data,optimizer_var, layers, batch_sz, epochs_size, regression_stat
                   metrics=[metrics_value],
                   )
     hist=History()
-    model.fit(x_train,y_train,batch_sz,epochs_size,validation_split=0.2,callbacks=[hist])
-    messagebox = tk.messagebox.showinfo("Info", "Done Training.")
+    model.fit(x_train,y_train,batch_sz,epochs_size,validation_split=validation_spliter,callbacks=[hist])
     return model, hist
 
 def ploter(hist):
@@ -82,17 +80,17 @@ def save(model):
     f_path.write_text(model_str)
     model.save_weights("output/model_weights.h5")
 
-def loader(target,path,dummy_input,reg_val,test_bool=False):
-    tets_switch=""
-    if test_bool:
-        tets_switch="_test"
+def loader(target,path,dummy_input,reg_val):
     dummy_bool = '#'
     if dummy_input != False:
         dummy_bool = ''
 
     robjects.r(r'''
+            install.packages("recipes")
+            memory.limit(10000)
             library(recipes)
             data_set <- read.csv("{0}")
+            data_set<-data_set[-1]
             data_set <- data_set %>% select({1}, everything())
             recepie_obj <- recipe({1} ~ ., data=data_set)%>%
                 {2}step_dummy(all_predictors(),-all_outcomes())%>%
@@ -101,13 +99,10 @@ def loader(target,path,dummy_input,reg_val,test_bool=False):
                 step_scale(all_predictors(),-all_outcomes())%>%
                 prep(data=data_set)
             x_train<-bake(recepie_obj, new_data=data_set)
-            write.csv(as.matrix(x_train),file = "data/data_ready{3}.csv")
-            '''.format(path, target, dummy_bool,tets_switch))
+            write.csv(as.matrix(x_train),file = "data/data_ready.csv")
+            '''.format(path, target, dummy_bool))
 
-    if test_bool:
-        data_ready = pd.read_csv('data/data_ready_test.csv')
-    else:
-        data_ready = pd.read_csv('data/data_ready.csv')
+    data_ready = pd.read_csv('data/data_ready.csv')
 
     output_set = list(set(data_ready[target]))
     global y_trainers
