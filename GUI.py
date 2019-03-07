@@ -1,7 +1,6 @@
 ######################################################################
 # Revolution UC
 # Giorgi, Dostonbek, Hila and Emely
-
 ######################################################################
 from tkinter import *
 import tkinter.filedialog as filer
@@ -21,18 +20,22 @@ class Datactive:
         self.path = ''
         self.dropdown = ''
         self.targeter=''
-
+        self.layer_reg=[]
         self.hidden_col = 5
         self.layer_nodes_lst = []
         self.density_matrix = []
+        self.drop_or_not=[]
         self.dummy_check_value = tkinter.BooleanVar()
         self.regression_status = tkinter.BooleanVar()
         self.dummy_check_status = False
+        self.regur_status=False
 
+        self.col=1
     def buildGUI(self, root):
         """
         "This function creates the GUI interface by adding buttons, labels and dropdowns"
         """
+        self.root=root
         im = Image.open("images/logo.png")
         photo = ImageTk.PhotoImage(im)
 
@@ -106,9 +109,6 @@ class Datactive:
 
         # initializing layers
         self.input_layer = self.create_layer("Input", 0, 0)
-
-        self.hidden_layer = self.create_layer("Hidden", 0, 2)
-
         self.add_layer = Button(self.ModelVizFrame, text="+", command=self.create_new_layer, height=1, width=1, bg='green', fg='white')
         self.add_layer.grid(row=0, column=99)
 
@@ -127,7 +127,8 @@ class Datactive:
 
         label = Label(self.ModelVizFrame, image=photo)
         label.image = photo  # keep a reference!
-        label.grid(row=layer_row+1, column=layer_col)  
+        label.grid(row=layer_row+1, column=layer_col)
+
 
         if layer != "Output":
 
@@ -149,11 +150,16 @@ class Datactive:
         """
          function to add layer
         """
-        if self.hidden_col < 19:
-            layer_label = tk.Label(self.ModelVizFrame, text="Hidden", width=5, bg='lightblue', anchor='w', pady=4, font=('Verdana', 8, 'bold'))
-            layer_label.grid(row=0, column=self.hidden_col, sticky='e')
+        if self.hidden_col < 17:
+            layer_type = tk.StringVar(self.ModelVizFrame)
+            layer_type.set('Layer')
+            choices = ['Dense', 'Drop Out']
+            layer_option = tk.OptionMenu(self.ModelVizFrame, layer_type, *choices)
+            layer_option.grid(row=0, column = self.hidden_col)
+
 
             im = Image.open("images/layer.png")
+            # im=im.resize((20,500),Image.ANTIALIAS)
             photo = ImageTk.PhotoImage(im)
 
             label = Label(self.ModelVizFrame, image=photo)
@@ -172,7 +178,7 @@ class Datactive:
             target_box.grid(row=2, column=self.hidden_col)
             
             self.layer_nodes_lst.append(target_box)
-
+            self.drop_or_not.append(layer_type)
             self.hidden_col += 2
 
         # function to train data by getting the user selections
@@ -180,17 +186,20 @@ class Datactive:
         self.density_matrix = []
         self.data_ready = []
         self.optimizer_value = self.var.get()
+        self.density_matrix.append([int(self.layer_nodes_lst[0].get()),"Dense"])
 
-        for layer in self.layer_nodes_lst:
-            self.density_matrix.append([int(layer.get())])
+        for layer_num in range(len(self.layer_nodes_lst)-1):
+            self.density_matrix.append([int(self.layer_nodes_lst[layer_num+1].get()),self.drop_or_not[layer_num].get()])
+            print(self.density_matrix)
 
         self.targeter = self.target_box.get()
         self.epochs_size = int(self.epoch_box.get())
         self.batch_size = int(self.batch_box.get())
         self.validation_split=int(self.validation_box.get())/100
         self.data_ready = loader(self.targeter, self.path, self.dummy_check_value.get(),self.regression_status.get())
-        self.model, self.hist = n_network(self.data_ready, self.optimizer_value, self.density_matrix, self.batch_size, self.epochs_size, self.regression_status.get(),self.validation_split)
-        ploter(self.hist)
+        self.modeler=Network()
+        self.model, self.hist = self.modeler.n_network(self.data_ready, self.optimizer_value, self.density_matrix, self.batch_size, self.epochs_size, self.regression_status.get(),self.validation_split)
+        self.modeler.ploter(self.hist)
 
 
 
@@ -237,7 +246,7 @@ class Datactive:
         main()
 
     def save_model(self):
-        save(self.model)
+        self.modeler.save(self.model)
 
 def main():
     """
@@ -246,7 +255,6 @@ def main():
     global test, root
     root = Tk()
     root.geometry('1200x700+300+50')
-    # root.resizable(0, 0)
     root.configure(background='white')
     root.title("Datactive")
     test = Datactive()
