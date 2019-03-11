@@ -1,17 +1,13 @@
 ######################################################################
 # Revolution UC
 # Giorgi, Dostonbek, Hila and Emely
-
 ######################################################################
 from tkinter import *
 import tkinter.filedialog as filer
-import tkinter as tk
 import tkinter
-import csv
 from PIL import Image, ImageTk
 from backend_nn import *
 import rpy2.robjects as robjects
-import threading
 
 
 class Datactive:
@@ -24,18 +20,22 @@ class Datactive:
         self.path = ''
         self.dropdown = ''
         self.targeter=''
-
+        self.layer_reg=[]
         self.hidden_col = 5
         self.layer_nodes_lst = []
         self.density_matrix = []
+        self.drop_or_not=[]
         self.dummy_check_value = tkinter.BooleanVar()
         self.regression_status = tkinter.BooleanVar()
         self.dummy_check_status = False
+        self.regur_status=False
 
+        self.col=1
     def buildGUI(self, root):
         """
         "This function creates the GUI interface by adding buttons, labels and dropdowns"
         """
+        self.root=root
         im = Image.open("images/logo.png")
         photo = ImageTk.PhotoImage(im)
 
@@ -84,6 +84,11 @@ class Datactive:
         self.batch_box.pack()
         self.batch_box.place(x=390, y=125)
 
+        self.validation_box = tkinter.Entry()
+        self.validation_box.insert(0, "Validation Split")
+        self.validation_box.pack()
+        self.validation_box.place(x=390, y=100)
+
         self.dummy_check_box = tkinter.Checkbutton(root, text="Contains Qualitative", variable=self.dummy_check_value)
         self.dummy_check_box.pack()
         self.dummy_check_box.place(x=560, y=125)
@@ -104,9 +109,6 @@ class Datactive:
 
         # initializing layers
         self.input_layer = self.create_layer("Input", 0, 0)
-
-        self.hidden_layer = self.create_layer("Hidden", 0, 2)
-
         self.add_layer = Button(self.ModelVizFrame, text="+", command=self.create_new_layer, height=1, width=1, bg='green', fg='white')
         self.add_layer.grid(row=0, column=99)
 
@@ -125,7 +127,8 @@ class Datactive:
 
         label = Label(self.ModelVizFrame, image=photo)
         label.image = photo  # keep a reference!
-        label.grid(row=layer_row+1, column=layer_col)  
+        label.grid(row=layer_row+1, column=layer_col)
+
 
         if layer != "Output":
 
@@ -147,11 +150,16 @@ class Datactive:
         """
          function to add layer
         """
-        if self.hidden_col < 19:
-            layer_label = tk.Label(self.ModelVizFrame, text="Hidden", width=5, bg='lightblue', anchor='w', pady=4, font=('Verdana', 8, 'bold'))
-            layer_label.grid(row=0, column=self.hidden_col, sticky='e')
+        if self.hidden_col < 17:
+            layer_type = tk.StringVar(self.ModelVizFrame)
+            layer_type.set('Layer')
+            choices = ['Dense', 'Drop Out']
+            layer_option = tk.OptionMenu(self.ModelVizFrame, layer_type, *choices)
+            layer_option.grid(row=0, column = self.hidden_col)
+
 
             im = Image.open("images/layer.png")
+            # im=im.resize((20,500),Image.ANTIALIAS)
             photo = ImageTk.PhotoImage(im)
 
             label = Label(self.ModelVizFrame, image=photo)
@@ -170,48 +178,29 @@ class Datactive:
             target_box.grid(row=2, column=self.hidden_col)
             
             self.layer_nodes_lst.append(target_box)
-
+            self.drop_or_not.append(layer_type)
             self.hidden_col += 2
-
-    
-    def test_data(self):
-        """
-        function to enable test_data. passing as we did not have time to finish it.
-        """
-        pass
-
 
         # function to train data by getting the user selections
     def train_data(self):
         self.density_matrix = []
         self.data_ready = []
         self.optimizer_value = self.var.get()
+        self.density_matrix.append([int(self.layer_nodes_lst[0].get()),"Dense"])
 
-        for layer in self.layer_nodes_lst:
-            self.density_matrix.append([int(layer.get())])
+        for layer_num in range(len(self.layer_nodes_lst)-1):
+            self.density_matrix.append([int(self.layer_nodes_lst[layer_num+1].get()),self.drop_or_not[layer_num].get()])
+            print(self.density_matrix)
 
         self.targeter = self.target_box.get()
         self.epochs_size = int(self.epoch_box.get())
         self.batch_size = int(self.batch_box.get())
-
+        self.validation_split=int(self.validation_box.get())/100
         self.data_ready = loader(self.targeter, self.path, self.dummy_check_value.get(),self.regression_status.get())
-        self.model, self.hist = n_network(self.data_ready, self.optimizer_value, self.density_matrix, self.batch_size, self.epochs_size, self.regression_status.get())
-        ploter(self.hist)
+        self.modeler=Network()
+        self.model, self.hist = self.modeler.n_network(self.data_ready, self.optimizer_value, self.density_matrix, self.batch_size, self.epochs_size, self.regression_status.get(),self.validation_split)
+        self.modeler.ploter(self.hist)
 
-
-        
-    def run_model(self):
-        """
-        function to run the model by calling the backend scripts
-        """
-        self.model = n_network(self.data_ready, self.optimizer_value, self.density_matrix, self.batch_size, self.epochs_size, self.regression_status.get())
-        
-        
-    def train_started_message(self):
-        """
-        displaying a textbox message to notify that the trainning of data is being done
-        """
-        self.message_train_started = tk.messagebox.showinfo("Info", "Training the model. Please, wait...")
 
 
     def viz_data(self):
@@ -219,6 +208,7 @@ class Datactive:
         function to access the web and visualize the data with ggplots
         """
         robjects.r(r'''
+            install.packages("esquisse")
             library(esquisse)
 
             data_raw<-read.csv("{0}")
@@ -256,7 +246,7 @@ class Datactive:
         main()
 
     def save_model(self):
-        save(self.model)
+        self.modeler.save(self.model)
 
 def main():
     """
@@ -265,7 +255,6 @@ def main():
     global test, root
     root = Tk()
     root.geometry('1200x700+300+50')
-    # root.resizable(0, 0)
     root.configure(background='white')
     root.title("Datactive")
     test = Datactive()
