@@ -8,6 +8,7 @@ from keras.callbacks import History
 import matplotlib.pyplot as plt
 import tkinter as tk
 
+
 class Network:
     def __init__(self):
         self.model=keras.models.Sequential()
