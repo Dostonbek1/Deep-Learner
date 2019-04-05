@@ -8,6 +8,11 @@ import tkinter as tk
 from PIL import Image, ImageTk
 from backend_nn import *
 import tkinter
+import os
+import re
+import win32api
+# from LogInScreen import LoginFrame
+import tableauserverclient as TSC
 
 class Datactive:
     """
@@ -28,7 +33,8 @@ class Datactive:
         self.regression_status = tkinter.BooleanVar()
         self.dummy_check_status = False
         self.regur_status=False
-
+        self.username=None
+        self.password=None
         self.col=1
     def buildGUI(self, root):
         """
@@ -51,7 +57,7 @@ class Datactive:
         choose_file.pack()
         choose_file.place(x=1140, y=125)
 
-        viz_data = Button(root, text="Visualize Data", command=self.viz_data, height=2, width=18, bg='blue', fg='white', font=20)
+        viz_data = Button(root, text="Visualize Data w/ Tableau", command=self.viz_data, height=2, width=18, bg='blue', fg='white', font=20)
         viz_data.pack()
         viz_data.place(x=1140, y=175)
 
@@ -200,9 +206,44 @@ class Datactive:
         self.model, self.hist = self.modeler.n_network(self.data_ready, self.optimizer_value, self.density_matrix, self.batch_size, self.epochs_size, self.regression_status.get(),self.validation_split)
         self.modeler.ploter(self.hist)
 
+    # def login_btn_clicked(self):
+    #     # print("Clicked")
+    #     self.username = self.entry_username.get()
+    #     self.password = self.entry_password.get()
+    #
+    #     tableau_auth = TSC.TableauAuth(self.username, self.password)
+    #     server = TSC.Server('http://SERVER_URL')
+    #
+    #     with server.auth.sign_in(tableau_auth):
+    #         all_datasources, pagination_item = server.datasources.get()
+    #         print("\nThere are {} datasources on site: ".format(pagination_item.total_available))
+    #         print([datasource.name for datasource in all_datasources])
+    # def open_authentication(self):
+    #     root=Tk()
+    #     self.label_username = Label(root, text="Username")
+    #     self.label_password = Label(root, text="Password")
+    #
+    #     self.entry_username = Entry(root)
+    #     self.entry_password = Entry(root, show="*")
+    #
+    #     self.label_username.grid(row=0, sticky=E)
+    #     self.label_password.grid(row=1, sticky=E)
+    #     self.entry_username.grid(row=0, column=1)
+    #     self.entry_password.grid(row=1, column=1)
+    #
+    #     self.checkbox = Checkbutton(root, text="Keep me logged in")
+    #     self.checkbox.grid(columnspan=2)
+    #
+    #     self.logbtn = Button(root, text="Login", command=self.login_btn_clicked)
+    #     self.logbtn.grid(columnspan=2)
+    #
+    #     root.mainloop()
+    #     # ans = retrive(root)
+    #     # print(ans)
+    #     # root.quit()
+    #     # return ans
 
-
-    def viz_data(self):
+    def viz_data(self,file_def='C:/Program Files/Tableau/Tableau 2019.1/bin/tableau.exe'):
         """
         function to access the web and visualize the data with ggplots
         """
@@ -213,7 +254,18 @@ class Datactive:
         #     data_raw<-read.csv("{0}")
         #     esquisser(data_raw)
         #     '''.format(self.path))
-        pass
+        try:
+            os.startfile(file_def)
+        except:
+            m = Tk()
+            m.wm_title("Select Tableau")
+            label = Label(m, text="In order to use this feature please install tableau.exe on your computer, and place it in C:/Program Files/")
+            label.pack(side="top", fill="x", pady=10)
+            B1 = Button(m, text="Okay", command=m.destroy)
+            B1.pack()
+
+
+        # os.startfile('C:/Program Files/Tableau/Tableau 2019.1/bin/tableau.exe')
 
         
     def dummy_handler(self):
