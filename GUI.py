@@ -4,11 +4,10 @@
 ######################################################################
 from tkinter import *
 import tkinter.filedialog as filer
-import tkinter
+import tkinter as tk
 from PIL import Image, ImageTk
 from backend_nn import *
-import rpy2.robjects as robjects
-
+import tkinter
 
 class Datactive:
     """
@@ -207,13 +206,14 @@ class Datactive:
         """
         function to access the web and visualize the data with ggplots
         """
-        robjects.r(r'''
-            install.packages("esquisse")
-            library(esquisse)
-
-            data_raw<-read.csv("{0}")
-            esquisser(data_raw)
-            '''.format(self.path))
+        # robjects.r(r'''
+        #     install.packages("esquisse")
+        #     library(esquisse)
+        #
+        #     data_raw<-read.csv("{0}")
+        #     esquisser(data_raw)
+        #     '''.format(self.path))
+        pass
 
         
     def dummy_handler(self):
