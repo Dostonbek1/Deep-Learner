@@ -1,6 +1,27 @@
 ######################################################################
 # Revolution UC
 # Giorgi, Dostonbek, Hila and Emely
+# RevolutionUC
+# Project: Deep Learner
+#
+# Authors:
+#
+# •	Giorgi Lomia •	Dostonbek Toirov •	Hila Manalai •	Emely Alfaro
+#
+# Categories: •	Education •	Demystify Data
+#
+# Purpose: To make neural networks/deep learning more accessible to general public and those who might not have programming skills.
+#
+# Description: Deep Learner is an interactive GUI that allows users to import data, visualize it, decide which variable to predict and run neural networks on it. Users are able to construct and train complex neural networks without writing any code. Based on the obtained results, users can try more optimizers, change predictors or save and export the model results to make decisions. In general, this program enables users to create their own neural network models without any prior knowledge of coding.
+#
+# What we learned: •	Creating a fully viable product •	Better understanding of Deep Learning and the underlying structure of neural networks •	Designing user interface •	Optimizing user experience •	Understanding user needs
+#
+# To Run the App
+# Clone or download the repo as .zip file
+# You need to have Python 3 to be able to run the app. Install requirements and dependencies by running:
+# $ pip3 install -r requirements.txt
+# Start the app by running:
+# $ python3 GUI.py
 ######################################################################
 from tkinter import *
 import tkinter.filedialog as filer
@@ -37,7 +58,9 @@ class DeepLearner:
         self.col=1
     def buildGUI(self, root):
         """
-        "This function creates the GUI interface by adding buttons, labels and dropdowns"
+
+        :param root: The root of the tkinter
+        :return: None
         """
         self.root=root
         im = Image.open("images/logo.png")
@@ -121,7 +144,12 @@ class DeepLearner:
         
     def create_layer(self, layer_label, layer_row, layer_col, layer="Not Output"):
         """
-        function to create layer
+        Creates the layer on the GUI display.
+        :param layer_label: Label of the layer
+        :param layer_row: row position of the layer
+        :param layer_col: column position of the layer
+        :param layer: Layer type
+        :return:
         """
         layer_label = tk.Label(self.ModelVizFrame, text=layer_label, width=5, bg='lightblue', anchor='w', pady=4, font=('Verdana', 8, 'bold'))
         layer_label.grid(row=layer_row, column=layer_col, sticky='e')
@@ -152,7 +180,8 @@ class DeepLearner:
     
     def create_new_layer(self):
         """
-         function to add layer
+        Creates a layer on the GUI
+        :return: None
         """
         if self.hidden_col < 17:
             layer_type = tk.StringVar(self.ModelVizFrame)
@@ -186,6 +215,10 @@ class DeepLearner:
 
         # function to train data by getting the user selections
     def train_data(self):
+        """
+        The function to train the data and complete the whole thing
+        :return: None
+        """
         self.density_matrix = []
         self.data_ready = []
         self.optimizer_value = self.var.get()
@@ -207,7 +240,9 @@ class DeepLearner:
 
     def viz_data(self,file_def='C:/Program Files/Tableau/Tableau 2019.1/bin/tableau.exe'):
         """
-        function to access the web and visualize the data with ggplots
+        Visualizing the data with Tableau
+        :param file_def: Tableau file location by default
+        :return:
         """
         try:
             os.startfile(file_def)
@@ -222,7 +257,8 @@ class DeepLearner:
         
     def dummy_handler(self):
         """
-        bool function to run the dummy variables step only if checked by user in the GUI
+        The call to the dummy handler
+        :return:  None
         """
         print(self.dummy_check_value.get())
         if self.dummy_check_value.get() == "off":
@@ -233,7 +269,8 @@ class DeepLearner:
          
     def chooseFile(self):
         """
-        function to let user choose the CSV file to be processed.
+        Choose the data.csv file to train on
+        :return: None
         """
         self.file = filer.askopenfilename(initialdir="/", title="Select file", filetypes=(("excel csv files", "*.csv"), ("all files", "*.*")))
         filename = self.file
@@ -243,7 +280,8 @@ class DeepLearner:
 
     def reset(self):
         """
-        creating the rest button to start over again
+        Restart the GUI
+        :return:
         """
         global root
         root.destroy()
