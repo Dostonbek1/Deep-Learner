@@ -27,6 +27,7 @@ What we learned:
 •	Optimizing user experience 
 •	Understanding user needs
 
+[![Watch the video]](https://youtu.be/vt5fpE0bzSY)
 # To Run the App
 
 1. Clone or download the repo as .zip file
