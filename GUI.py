@@ -11,10 +11,9 @@ import tkinter
 import os
 import re
 import win32api
-# from LogInScreen import LoginFrame
 import tableauserverclient as TSC
 
-class Datactive:
+class DeepLearner:
     """
     This class initializes all the variables used in the interface and in the backend"
     """
@@ -55,24 +54,24 @@ class Datactive:
 
         choose_file = Button(root, text="Import data", command=self.chooseFile, height=2, width=18, bg='green', fg='white', font=20)
         choose_file.pack()
-        choose_file.place(x=1140, y=125)
+        choose_file.place(x=1180, y=125)
 
-        viz_data = Button(root, text="Visualize Data w/ Tableau", command=self.viz_data, height=2, width=18, bg='blue', fg='white', font=20)
+        viz_data = Button(root, text="Visualize Data w/ Tableau", command=self.viz_data, height=2, width=20, bg='blue', fg='white', font=20)
         viz_data.pack()
-        viz_data.place(x=1140, y=175)
+        viz_data.place(x=1170, y=175)
 
         train = Button(root, text="Train Data", command=self.train_data, height=2, width=18, bg='green', fg='white', font=20)
         train.pack()
-        train.place(x=1140, y=300)
+        train.place(x=1180, y=300)
 
         save_model = Button(root, text="Save Model", command=self.save_model, height=2, width=18, bg='green', fg='white', font=20)
         save_model.pack()
-        save_model.place(x=1140, y=350)
+        save_model.place(x=1180, y=350)
 
 
         reset_btn = Button(root, text="Reset", command=self.reset, height=2, width=18, bg='green', fg='white', font=20)
         reset_btn.pack()
-        reset_btn.place(x=1140, y=475)
+        reset_btn.place(x=1180, y=475)
 
         self.target_box = tkinter.Entry()
         self.target_box.insert(0, "Target...")
@@ -98,7 +97,7 @@ class Datactive:
         self.dummy_check_box.pack()
         self.dummy_check_box.place(x=560, y=125)
 
-        # second drop down menu /// Class Mode
+        # /// Class Mode check box
         self.regression_checkbox = tkinter.Checkbutton(root, text="Regression", variable=self.regression_status)
         self.regression_checkbox.pack()
         self.regression_checkbox.place(x=730, y=125)
@@ -164,7 +163,6 @@ class Datactive:
 
 
             im = Image.open("images/layer.png")
-            # im=im.resize((20,500),Image.ANTIALIAS)
             photo = ImageTk.PhotoImage(im)
 
             label = Label(self.ModelVizFrame, image=photo)
@@ -184,7 +182,7 @@ class Datactive:
             
             self.layer_nodes_lst.append(target_box)
             self.drop_or_not.append(layer_type)
-            self.hidden_col += 2
+            self.hidden_col += 1
 
         # function to train data by getting the user selections
     def train_data(self):
@@ -206,54 +204,11 @@ class Datactive:
         self.model, self.hist = self.modeler.n_network(self.data_ready, self.optimizer_value, self.density_matrix, self.batch_size, self.epochs_size, self.regression_status.get(),self.validation_split)
         self.modeler.ploter(self.hist)
 
-    # def login_btn_clicked(self):
-    #     # print("Clicked")
-    #     self.username = self.entry_username.get()
-    #     self.password = self.entry_password.get()
-    #
-    #     tableau_auth = TSC.TableauAuth(self.username, self.password)
-    #     server = TSC.Server('http://SERVER_URL')
-    #
-    #     with server.auth.sign_in(tableau_auth):
-    #         all_datasources, pagination_item = server.datasources.get()
-    #         print("\nThere are {} datasources on site: ".format(pagination_item.total_available))
-    #         print([datasource.name for datasource in all_datasources])
-    # def open_authentication(self):
-    #     root=Tk()
-    #     self.label_username = Label(root, text="Username")
-    #     self.label_password = Label(root, text="Password")
-    #
-    #     self.entry_username = Entry(root)
-    #     self.entry_password = Entry(root, show="*")
-    #
-    #     self.label_username.grid(row=0, sticky=E)
-    #     self.label_password.grid(row=1, sticky=E)
-    #     self.entry_username.grid(row=0, column=1)
-    #     self.entry_password.grid(row=1, column=1)
-    #
-    #     self.checkbox = Checkbutton(root, text="Keep me logged in")
-    #     self.checkbox.grid(columnspan=2)
-    #
-    #     self.logbtn = Button(root, text="Login", command=self.login_btn_clicked)
-    #     self.logbtn.grid(columnspan=2)
-    #
-    #     root.mainloop()
-    #     # ans = retrive(root)
-    #     # print(ans)
-    #     # root.quit()
-    #     # return ans
 
     def viz_data(self,file_def='C:/Program Files/Tableau/Tableau 2019.1/bin/tableau.exe'):
         """
         function to access the web and visualize the data with ggplots
         """
-        # robjects.r(r'''
-        #     install.packages("esquisse")
-        #     library(esquisse)
-        #
-        #     data_raw<-read.csv("{0}")
-        #     esquisser(data_raw)
-        #     '''.format(self.path))
         try:
             os.startfile(file_def)
         except:
@@ -263,9 +218,6 @@ class Datactive:
             label.pack(side="top", fill="x", pady=10)
             B1 = Button(m, text="Okay", command=m.destroy)
             B1.pack()
-
-
-        # os.startfile('C:/Program Files/Tableau/Tableau 2019.1/bin/tableau.exe')
 
         
     def dummy_handler(self):
@@ -309,7 +261,7 @@ def main():
     root.geometry('1200x700+300+50')
     root.configure(background='white')
     root.title("Datactive")
-    test = Datactive()
+    test = DeepLearner()
     test.buildGUI(root)
     root.mainloop()
 
