@@ -30,10 +30,7 @@ What we learned:
 •	Optimizing user experience 
 •	Understanding user needs
 
-
-[![Watch the video]](https://www.youtube.com/watch?v=GILXhUWWP7s)
-
-If You have questions please email me at: lomiageorge@gmail.com
+[![Watch the video]](https://youtu.be/vt5fpE0bzSY)
 
 # To Run the App
 
