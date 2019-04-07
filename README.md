@@ -33,6 +33,8 @@ What we learned:
 
 [![Watch the video]](https://www.youtube.com/watch?v=GILXhUWWP7s)
 
+If You have questions please email me at: lomiageorge@gmail.com
+
 # To Run the App
 
 1. Clone or download the repo as .zip file
