@@ -28,7 +28,7 @@ What we learned:
 •	Understanding user needs
 
 
-[![Watch the video](https://i.imgur.com/vKb2F1B.png)](https://www.youtube.com/watch?v=GILXhUWWP7s)
+[![Watch the video]](https://www.youtube.com/watch?v=GILXhUWWP7s)
 
 # To Run the App
 
