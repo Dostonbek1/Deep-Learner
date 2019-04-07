@@ -1,4 +1,6 @@
-![alt text](https://github.com/GioLomia/Deep_Learner/blob/master/images/logo.png)
+<p align="center">
+  <img width="460" height="300" src="https://github.com/GioLomia/Deep_Learner/blob/master/images/logo.png">
+</p>
 # RevolutionUC
 
 Project: Deep Learner
