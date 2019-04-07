@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="260" height="150" src="https://github.com/GioLomia/Deep_Learner/blob/master/images/logo.png">
+  <img width="260" height="260" src="https://github.com/GioLomia/Deep_Learner/blob/master/images/logo.png">
 </p>
 # RevolutionUC
 
