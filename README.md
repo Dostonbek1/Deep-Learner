@@ -1,3 +1,6 @@
+<p align="center">
+  <img src="https://github.com/GioLomia/Deep_Learner/blob/master/images/logo.png">
+</p>
 # RevolutionUC
 
 Project: Deep Learner
@@ -27,7 +30,8 @@ What we learned:
 •	Optimizing user experience 
 •	Understanding user needs
 
-[![Watch the video]](https://youtu.be/vt5fpE0bzSY)
+[![Watch the video]](https://www.youtube.com/watch?v=GILXhUWWP7s)
+
 # To Run the App
 
 1. Clone or download the repo as .zip file
