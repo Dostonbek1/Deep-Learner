@@ -145,7 +145,7 @@ class Network:
         """
         model_str = model.to_json()
         f_path = Path("output/model_str.json")
-        f_path.write_text(model_str)
+        model.save('output/model_str.h5')
         model.save_weights("output/model_weights.h5")
 
 

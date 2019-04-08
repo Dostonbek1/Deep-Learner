@@ -30,9 +30,7 @@ from PIL import Image, ImageTk
 from backend_nn import *
 import tkinter
 import os
-import re
-import win32api
-import tableauserverclient as TSC
+
 
 class DeepLearner:
     """
