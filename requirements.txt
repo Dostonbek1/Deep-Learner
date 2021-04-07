@@ -1,7 +1,7 @@
 absl-py==0.6.1
 alabaster==0.7.8
 altgraph==0.16.1
-ansible==2.6.4
+ansible==2.10.0
 antiorm==1.2.1
 apturl==0.5.2
 asn1crypto==0.24.0
