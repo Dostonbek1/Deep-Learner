@@ -60,7 +60,7 @@ inflection==0.3.1
 influxdb==5.2.0
 isort==4.3.4
 itsdangerous==1.1.0
-Jinja2==2.10
+Jinja2==2.11.3
 jsonschema==2.6.0
 kazam==1.4.5
 Keras==2.2.4
