@@ -23,7 +23,7 @@ colorama==0.3.7
 command-not-found==0.3
 configobj==5.0.6
 configparser==3.5.0
-cryptography==2.3.1
+cryptography==3.2
 cupshelpers==1.0
 cycler==0.10.0
 db==0.1.1
