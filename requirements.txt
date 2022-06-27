@@ -122,7 +122,7 @@ pytz==2018.9
 pyxattr==0.6.0
 pyxdg==0.25
 Quandl==3.4.6
-reportlab==3.4.0
+reportlab==3.5.55
 requests==2.21.0
 requests-unixsocket==0.1.5
 rpy2==3.0.1
